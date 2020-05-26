@@ -17,3 +17,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('home',function(){
+	return ['home'=>\Wink\WinkPost::with('author')->latest()->get()->map(function($post){
+$post->featured_image = url($post->featured_image);
+$post->body = str_replace('"/storage/wink','"'.url('/storage/wink//'), $post->body);
+$post->author->avatar = url($post->author->avatar);
+return $post;})];
+});
