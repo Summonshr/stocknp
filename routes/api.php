@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 Route::get('home', function () {
     return ['home' => \Wink\WinkPost::with('author', 'tags')->latest()->get()->map(function ($post) {
         $post->featured_image = url($post->featured_image);
