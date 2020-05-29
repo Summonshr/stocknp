@@ -27,7 +27,6 @@ class Companies extends Component
         $this->resetPage();
     }
 
-
     public function updatingSector()
     {
         $this->resetPage();
@@ -36,7 +35,7 @@ class Companies extends Component
 
     public function render()
     {
-        return view('livewire.company', [
+        return view('livewire.companies', [
             'types' => \App\Company::distinct()->pluck('type'),
             'sectors' => \App\Company::distinct()->pluck('sector_name'),
             'companies' => \App\Company::when($this->search, function ($query) {

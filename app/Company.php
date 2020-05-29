@@ -12,7 +12,7 @@ class Company extends Model
         return $this->hasMany(News::class, 'symbol', 'symbol');
     }
 
-    public function reports()
+    public function report()
     {
         return $this->hasOne(Report::class, 'symbol', 'symbol');
     }

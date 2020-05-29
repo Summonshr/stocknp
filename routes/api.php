@@ -29,5 +29,7 @@ Route::get('tags/{slug?}', function ($slug) {
 
 
 Route::get('companies', function () {
-    return \App\Company::all();
+    return \App\Company::with(['report' => function ($query) {
+        return $query->select('symbol', 'previous_quarter', 'current_quarter', 'previous_year', 'earning_per_share');
+    }])->get();
 });
