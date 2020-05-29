@@ -23,7 +23,7 @@
         <tbody>
             @foreach($companies as $company)
             <tr>
-                <td title="{{$company->name}}">{{$company->symbol}}</td>
+                <td title="{{$company->name}}"><a href="{{route('company', $company->symbol)}}">{{$company->symbol}}</a></td>
                 <td>{{$company->sector_name}}</td>
                 <td>{{$company->type}}</td>
             </tr>

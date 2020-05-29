@@ -5,7 +5,7 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class Company extends Component
+class Companies extends Component
 {
     use WithPagination;
 

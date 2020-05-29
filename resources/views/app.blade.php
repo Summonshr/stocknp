@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    @livewire('company')
+    @livewire(request()->route()->getName())
     @livewireScripts
 </body>
 
