@@ -45,7 +45,7 @@
                 $company->income = $data['NetIncome'] * 100;
             }
 
-            $data = json_decode(file_get_contents('https://bizmandu.com/__stock/tearsheet/header/?tkr=' . $company->symbol))->message->latestPrice ?? false;
+            $data = Http::timeout(2)->get('https://bizmandu.com/__stock/tearsheet/financial/keyStats/?tkr=' . $company->symbol)['message']['latestPrice'] ?? false;
             if ($data)
                 $company->price = $data;
 
