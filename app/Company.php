@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Company extends Model
 {
 
+    public $timestamps = false;
+
     public function news()
     {
         return $this->hasMany(News::class, 'symbol', 'symbol');
@@ -20,6 +22,11 @@ class Company extends Model
     public function prices()
     {
         return $this->hasMany(SharePrice::class, 'symbol', 'symbol');
+    }
+
+    public function price()
+    {
+        return $this->hasOne(SharePrice::class, 'symbol', 'symbol');
     }
 
     public function dividends()
