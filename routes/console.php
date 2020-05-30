@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Artisan;
 
-Artisan::call('fetch', function () {
+Artisan::command('fetch', function () {
 
 
     \App\Company::where('eps', '=', 0)->each(function ($company) {
