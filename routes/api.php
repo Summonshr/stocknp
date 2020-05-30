@@ -30,7 +30,5 @@
 
 
     Route::get('companies', function () {
-
-
         return \App\Company::all();
     });
