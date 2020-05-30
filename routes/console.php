@@ -1,6 +1,7 @@
 <?php
 
 
+
 Artisan::command('fetch', function () {
 
 
