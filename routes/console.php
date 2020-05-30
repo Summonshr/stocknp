@@ -15,9 +15,32 @@ Artisan::command('company-date', function () {
                 $company->income = $data['NetIncome'] * 100;
             }
 
-            $data = Http::timeout(2)->get('https://bizmandu.com/__stock/tearsheet/header/?tkr=' . $company->symbol)['message']['latestPrice'] ?? false;
-            if ($data)
-                $company->price = $data;
+            $data = Http::timeout(2)->get('https://bizmandu.com/__stock/tearsheet/header/?tkr=' . $company->symbol)['message'] ?? false;
+            if ($data) {
+                $company->price = $data['latestPrice'];
+                $company->change_status = $data['pointChange'];
+            }
+
+
+            $company->save();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    });
+});
+
+Artisan::command('change-status', function () {
+    \App\Company::all()->each(function ($company) {
+        try {
+            print($company->symbol);
+
+            $data = Http::timeout(2)->get('https://bizmandu.com/__stock/tearsheet/header/?tkr=' . $company->symbol)['message'] ?? false;
+
+            if ($data) {
+                $company->price = $data['latestPrice'];
+                $company->change_status = $data['pointChange'];
+            }
+
 
             $company->save();
         } catch (\Throwable $th) {
