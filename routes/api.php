@@ -34,7 +34,7 @@
     });
 
     Route::get('fetch', function () {
-        \App\Company::where('income', '0')->get()->each(function ($company) {
+        \App\Company::where('income', '0')->get()->dd()->each(function ($company) {
             print($company->symbol);
             $data = Http::timeout(2)->get('https://bizmandu.com/__stock/tearsheet/financial/keyStats/?tkr=' . $company->symbol)['message']['data'][0] ?? false;
             if ($data && ($data['GrowthOverPriorPeriod'] ?? false)) {
@@ -50,5 +50,13 @@
                 $company->price = $data;
 
             $company->save();
+        });
+    });
+
+
+
+    Route::get('mutual-funds', function () {
+        \App\Company::where('type', 'Mutual Funds')->get()->dd()->each(function ($company) {
+            $data = Http::timeout(2)->get('https://bizmandu.com/__stock/tearsheet/summaryMf/?tkr=' . 'NIBSF1' ?? $company->symbol)['message'] ?? false;
         });
     });

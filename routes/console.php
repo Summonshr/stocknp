@@ -2,13 +2,13 @@
 
 use Illuminate\Support\Facades\Artisan;
 
-Artisan::command('fetch', function () {
-    \App\Company::all()->each(function ($company) {
+Artisan::command('company-date', function () {
+    \App\Company::where('income', '0')->get()->each(function ($company) {
         try {
             print($company->symbol);
-            $data = Http::timeout(2)->get('https://bizmandu.com/__stock/tearsheet/financial/keyStats/?tkr=' . $company->symbol)['message']['data'][0] ?? false;
-            if ($data && ($data['GrowthOverPriorPeriod'] ?? false)) {
-                $company->growth = $data['GrowthOverPriorPeriod'] * 100;
+            $data = Http::timeout(5)->get('https://bizmandu.com/__stock/tearsheet/financial/keyStats/?tkr=' . $company->symbol)['message']['data'][0] ?? false;
+            if ($data) {
+                $company->growth = ($data['GrowthOverPriorPeriod'] ?? 0) * 100;
                 $company->eps = $data['EpsAnnualized'];
                 $company->bvps = $data['BookValuePerShare'];
                 $company->npl = ($data['NonPerformingLoanNplToTotalLoan'] ?? 0) * 100;
@@ -24,4 +24,9 @@ Artisan::command('fetch', function () {
             //throw $th;
         }
     });
+});
+
+
+Artisan::command('mutual-funds', function () {
+    dd();
 });
