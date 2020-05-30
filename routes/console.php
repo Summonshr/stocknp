@@ -3,8 +3,8 @@
 use Illuminate\Support\Facades\Artisan;
 
 Artisan::command('fetch', function () {
-    try {
-        \App\Company::all()->each(function ($company) {
+    \App\Company::all()->each(function ($company) {
+        try {
             print($company->symbol);
             $data = Http::timeout(2)->get('https://bizmandu.com/__stock/tearsheet/financial/keyStats/?tkr=' . $company->symbol)['message']['data'][0] ?? false;
             if ($data && ($data['GrowthOverPriorPeriod'] ?? false)) {
@@ -20,8 +20,8 @@ Artisan::command('fetch', function () {
                 $company->price = $data;
 
             $company->save();
-        });
-    } catch (\Throwable $th) {
-        //throw $th;
-    }
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    });
 });
