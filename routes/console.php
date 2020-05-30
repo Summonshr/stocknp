@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Artisan;
 
 Artisan::command('fetch', function () {
-    \App\Company::all()->each(function ($company) {
+    \App\Company::where('income', '0')->get()->each(function ($company) {
         print($company->symbol);
         $data = json_decode(file_get_contents('https://bizmandu.com/__stock/tearsheet/financial/keyStats/?tkr=' . $company->symbol))->message->data[0] ?? false;
         if ($data && ($data->GrowthOverPriorPeriod ?? false)) {
@@ -14,9 +14,9 @@ Artisan::command('fetch', function () {
             $company->income = $data->NetIncome * 100;
         }
 
-        $data = json_decode(file_get_contents('https://bizmandu.com/__stock/tearsheet/header/?tkr=' . $company->symbol))->message->latestPrice;
-
-        $company->latestPrice = $data;
+        $data = json_decode(file_get_contents('https://bizmandu.com/__stock/tearsheet/header/?tkr=' . $company->symbol))->message->latestPrice ?? false;
+        if ($data)
+            $company->price = $data;
 
         $company->save();
     });
