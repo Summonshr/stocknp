@@ -60,3 +60,18 @@
             $data = Http::timeout(2)->get('https://bizmandu.com/__stock/tearsheet/summaryMf/?tkr=' . 'NIBSF1' ?? $company->symbol)['message'] ?? false;
         });
     });
+
+
+
+    Route::get('dividends', function () {
+        \App\Company::all()->each(function ($company) {
+            print($company->symbol);
+            $data = Http::timeout(2)->get('https://bizmandu.com/__stock/tearsheet/dividend/?tkr=' . $company->symbol)['message']['dividend'] ?? false;
+            $dividend = new \App\Dividend();
+            $dividend->symbol = $company->symbol;
+            $data = collect($data)->map(function ($e) use ($dividend) {
+                $dividend->forceFill($e);
+                $dividend->save();
+            });
+        });
+    });

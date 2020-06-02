@@ -50,6 +50,30 @@ Artisan::command('change-status', function () {
 });
 
 
-Artisan::command('mutual-funds', function () {
-    dd();
+Artisan::command('dividends', function () {
+    \App\Dividend::truncate();
+    \App\Right::truncate();
+    \App\Company::all()->each(function ($company) {
+
+        try {
+            print($company->symbol);
+            $data = Http::timeout(5)->get('https://bizmandu.com/__stock/tearsheet/dividend/?tkr=' . $company->symbol)['message'] ?? false;
+
+            collect($data['dividend'] ?? [])->reverse()->map(function ($e) use ($company) {
+                $dividend = new \App\Dividend();
+                $dividend->symbol = $company->symbol;
+                $dividend->forceFill($e);
+                $dividend->save();
+            });
+
+            collect($data['rights'] ?? [])->reverse()->map(function ($e) use ($company) {
+                $right = new \App\Right();
+                $right->symbol = $company->symbol;
+                $right->forceFill(['percentage' => $e['rights'], 'year' => $e['date']]);
+                $right->save();
+            });
+        } catch (\Throwable $th) {
+            print($th);
+        }
+    });
 });
