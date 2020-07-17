@@ -2,7 +2,6 @@
     // this commit should be seen in server
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Route;
-    use Goutte\Client;
 
     Route::middleware('auth:api')->get('/user', function (Request $request) {
         return $request->user();
